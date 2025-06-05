@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '../../lib/supabase';
+import { Button } from '../../../components/ui/button';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -37,7 +39,15 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <p className="text-red-500">{error}</p>}
-        <button className="w-full bg-black p-2 text-white" type="submit">Login</button>
+        <Button className="w-full" type="submit">
+          Login
+        </Button>
+        <p className="text-sm text-center">
+          No account?{' '}
+          <Link href="/auth/register" className="underline">
+            Register
+          </Link>
+        </p>
       </form>
     </div>
   );
