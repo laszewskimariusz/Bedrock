@@ -1,3 +1,7 @@
 import { Resend } from 'resend';
 
-export const resend = new Resend(process.env.Resend!);
+codex/create-bedrock-–-notion-clone-in-next.js
+
+
+export const resend = new Resend(process.env.RESEND_API_KEY!);
+main
