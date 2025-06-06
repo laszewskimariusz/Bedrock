@@ -4,57 +4,13 @@
 
 @layer base {
   :root {
-    --background: 255 255 255;
-    --foreground: 17 24 39;
-    --card: 255 255 255;
-    --card-foreground: 17 24 39;
-    --popover: 255 255 255;
-    --popover-foreground: 17 24 39;
-    --primary: 37 99 235;
-    --primary-foreground: 248 250 252;
-    --secondary: 248 250 252;
-    --secondary-foreground: 17 24 39;
-    --muted: 248 250 252;
-    --muted-foreground: 107 114 128;
-    --accent: 243 244 246;
-    --accent-foreground: 17 24 39;
-    --destructive: 239 68 68;
-    --destructive-foreground: 248 250 252;
-    --border: 229 231 235;
-    --input: 229 231 235;
-    --ring: 37 99 235;
     --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 17 24 39;
-    --foreground: 248 250 252;
-    --card: 31 41 55;
-    --card-foreground: 248 250 252;
-    --popover: 31 41 55;
-    --popover-foreground: 248 250 252;
-    --primary: 59 130 246;
-    --primary-foreground: 17 24 39;
-    --secondary: 55 65 81;
-    --secondary-foreground: 248 250 252;
-    --muted: 55 65 81;
-    --muted-foreground: 156 163 175;
-    --accent: 55 65 81;
-    --accent-foreground: 248 250 252;
-    --destructive: 220 38 38;
-    --destructive-foreground: 248 250 252;
-    --border: 75 85 99;
-    --input: 75 85 99;
-    --ring: 59 130 246;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     font-feature-settings: "cv11", "ss01";
     font-variation-settings: "opsz" 32;
@@ -95,4 +51,13 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.8);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(163, 163, 163, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(163, 163, 163, 0.8);
 }

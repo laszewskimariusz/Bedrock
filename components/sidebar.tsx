@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from './ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Dropdown, DropdownItem, DropdownSeparator } from './ui/dropdown'
 import { useAuth } from '../app/lib/auth-context'
+import PreferencesModal from './preferences-modal'
 import { 
   Search, 
   Settings, 
@@ -19,12 +21,15 @@ import {
   LogOut,
   Clock,
   Star,
-  Trash2
+  Trash2,
+  User,
+  Palette
 } from 'lucide-react'
 
 export default function Sidebar() {
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(true)
   const [recentPages, setRecentPages] = useState<any[]>([])
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const { user, signOut } = useAuth()
   const router = useRouter()
 
@@ -108,41 +113,60 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="flex h-full w-64 flex-col bg-gray-50 border-r border-gray-200">
-      {/* User Profile - Notion Style */}
-      <div className="flex items-center gap-2 p-3 hover:bg-gray-100 cursor-pointer group">
-        <Avatar className="h-6 w-6">
-          <AvatarImage src={user?.user_metadata?.avatar_url} />
-          <AvatarFallback className="text-xs">{getInitials(user)}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate">{getDisplayName(user)}</p>
-        </div>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={handleSignOut} 
-          className="opacity-0 group-hover:opacity-100 h-6 w-6 p-0 hover:bg-gray-200"
-          title="Sign out"
+    <div className="flex h-full w-64 flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
+      {/* User Profile - Notion Style with Dropdown */}
+      <div className="p-3">
+        <Dropdown
+          trigger={
+            <div className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer group w-full">
+              <Avatar className="h-6 w-6">
+                <AvatarImage src={user?.user_metadata?.avatar_url} />
+                <AvatarFallback className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">{getInitials(user)}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{getDisplayName(user)}</p>
+              </div>
+              <ChevronDown className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+            </div>
+          }
+          align="left"
         >
-          <LogOut className="h-3 w-3" />
-        </Button>
+          <DropdownItem 
+            icon={<User className="h-4 w-4" />}
+            onClick={() => {/* TODO: Profile settings */}}
+          >
+            My account
+          </DropdownItem>
+          <DropdownItem 
+            icon={<Palette className="h-4 w-4" />}
+            onClick={() => setIsPreferencesOpen(true)}
+          >
+            Preferences
+          </DropdownItem>
+          <DropdownSeparator />
+          <DropdownItem 
+            icon={<LogOut className="h-4 w-4" />}
+            onClick={handleSignOut}
+          >
+            Log out
+          </DropdownItem>
+        </Dropdown>
       </div>
 
       {/* Quick Actions - Notion Style */}
       <div className="px-2 py-1 space-y-0.5">
         <Button 
           variant="ghost" 
-          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
         >
           <Search className="h-4 w-4" />
           Search
-          <span className="ml-auto text-xs text-gray-400">⌘K</span>
+          <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">⌘K</span>
         </Button>
         
         <Button 
           variant="ghost" 
-          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
           onClick={() => router.push('/dashboard')}
         >
           <span className="text-sm">🏠</span>
@@ -151,7 +175,7 @@ export default function Sidebar() {
         
         <Button 
           variant="ghost" 
-          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
         >
           <Settings className="h-4 w-4" />
           Settings & members
@@ -159,34 +183,34 @@ export default function Sidebar() {
       </div>
 
       {/* Divider */}
-      <div className="border-t border-gray-200 my-2"></div>
+      <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
       {/* Workspace Section - Notion Style */}
       <div className="flex-1 overflow-y-auto px-2">
         <div className="space-y-0.5">
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-1 h-6 text-xs font-medium text-gray-500 hover:bg-gray-100 px-1"
-            onClick={() => setIsWorkspaceOpen(!isWorkspaceOpen)}
-          >
-            {isWorkspaceOpen ? (
-              <ChevronDown className="h-3 w-3" />
-            ) : (
-              <ChevronRight className="h-3 w-3" />
-            )}
-            Private
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="ml-auto h-4 w-4 p-0 hover:bg-gray-200"
+          <div className="flex items-center w-full h-6 px-1">
+            <Button
+              variant="ghost"
+              className="flex-1 justify-start gap-1 h-6 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 px-1"
+              onClick={() => setIsWorkspaceOpen(!isWorkspaceOpen)}
+            >
+              {isWorkspaceOpen ? (
+                <ChevronDown className="h-3 w-3" />
+              ) : (
+                <ChevronRight className="h-3 w-3" />
+              )}
+              Private
+            </Button>
+            <button 
+              className="h-4 w-4 p-0 hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation()
                 createNewPage()
               }}
             >
               <Plus className="h-3 w-3" />
-            </Button>
-          </Button>
+            </button>
+          </div>
 
           {isWorkspaceOpen && (
             <div className="space-y-0.5 pl-3">
@@ -195,7 +219,7 @@ export default function Sidebar() {
                 <Button
                   key={index}
                   variant="ghost"
-                  className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+                  className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
                   onClick={() => router.push(`/page/${page.id}`)}
                 >
                   <span className="text-sm">{page.emoji}</span>
@@ -206,7 +230,7 @@ export default function Sidebar() {
               {/* Template Pages */}
               <Button 
                 variant="ghost" 
-                className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+                className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
               >
                 <span className="text-sm">📖</span>
                 Getting Started
@@ -214,7 +238,7 @@ export default function Sidebar() {
               
               <Button 
                 variant="ghost" 
-                className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+                className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
               >
                 <span className="text-sm">📅</span>
                 Calendar
@@ -222,7 +246,7 @@ export default function Sidebar() {
               
               <Button 
                 variant="ghost" 
-                className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+                className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
               >
                 <span className="text-sm">📋</span>
                 Templates
@@ -235,7 +259,7 @@ export default function Sidebar() {
         <div className="mt-4">
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+            className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
             onClick={createNewPage}
           >
             <Plus className="h-4 w-4" />
@@ -245,15 +269,21 @@ export default function Sidebar() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-200 p-2">
+      <div className="border-t border-gray-200 dark:border-gray-700 p-2">
         <Button 
           variant="ghost" 
-          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 hover:bg-gray-100 font-normal"
+          className="w-full justify-start gap-2 h-7 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-normal"
         >
           <Trash2 className="h-4 w-4" />
           Trash
         </Button>
       </div>
+
+      {/* Preferences Modal */}
+      <PreferencesModal 
+        isOpen={isPreferencesOpen}
+        onClose={() => setIsPreferencesOpen(false)}
+      />
     </div>
   )
 } 

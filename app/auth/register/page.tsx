@@ -61,16 +61,16 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="text-center">
               <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">Check your email</h2>
-              <p className="text-muted-foreground mb-4">
+              <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Check your email</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 We've sent you a confirmation link at <strong>{email}</strong>
               </p>
-              <p className="text-sm text-muted-foreground mb-6">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                 Click the link in the email to activate your account.
               </p>
               <Link href="/auth/login">
@@ -85,20 +85,20 @@ export default function RegisterPage() {
     )
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-6">
             <ArrowLeft className="h-4 w-4" />
             Back to home
           </Link>
           <div className="flex items-center justify-center gap-2 mb-4">
-            <FileText className="h-8 w-8" />
-            <span className="text-2xl font-bold">Bedrock</span>
+            <FileText className="h-8 w-8 text-gray-900 dark:text-gray-100" />
+            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Bedrock</span>
           </div>
-          <h1 className="text-2xl font-bold">Create your account</h1>
-          <p className="text-muted-foreground">Start your journey with Bedrock</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Create your account</h1>
+          <p className="text-gray-600 dark:text-gray-400">Start your journey with Bedrock</p>
         </div>
 
         {/* Register Form */}

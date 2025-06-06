@@ -388,7 +388,8 @@ export function groupBlocksByType(blocks: Block[]): Record<BlockType, Block[]> {
     bulleted_list_item: [],
     numbered_list_item: [],
     to_do: [],
-    toggle: []
+    toggle: [],
+    code: []
   }
   
   const addBlocksToGroups = (blockList: Block[]) => {

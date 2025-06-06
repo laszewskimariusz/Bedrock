@@ -19,7 +19,7 @@ export default function RichTextRenderer({ content, className = '' }: RichTextRe
         if (annotations.italic) className += ' italic'
         if (annotations.strikethrough) className += ' line-through'
         if (annotations.underline) className += ' underline'
-        if (annotations.code) className += ' bg-gray-100 px-1 py-0.5 rounded text-sm font-mono'
+        if (annotations.code) className += ' bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm font-mono'
         
         // Kolory tekstu
         if (annotations.color && annotations.color !== 'default') {
@@ -52,7 +52,7 @@ export default function RichTextRenderer({ content, className = '' }: RichTextRe
                 href={part.text.link} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline"
               >
                 {part.text.content}
               </a>

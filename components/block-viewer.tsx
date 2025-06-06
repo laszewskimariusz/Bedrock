@@ -27,23 +27,23 @@ function BlockViewComponent({ block }: BlockViewComponentProps) {
   const getBlockClassName = (type: BlockType) => {
     switch (type) {
       case 'heading_1':
-        return 'text-3xl font-bold text-gray-900 mb-4'
+        return 'text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4'
       case 'heading_2':
-        return 'text-2xl font-semibold text-gray-900 mb-3'
+        return 'text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-3'
       case 'heading_3':
-        return 'text-xl font-medium text-gray-900 mb-2'
+        return 'text-xl font-medium text-gray-900 dark:text-gray-100 mb-2'
       case 'paragraph':
-        return 'text-base text-gray-900 leading-relaxed mb-2'
+        return 'text-base text-gray-900 dark:text-gray-100 leading-relaxed mb-2'
       case 'bulleted_list_item':
-        return 'text-base text-gray-900 leading-relaxed ml-6 mb-1'
+        return 'text-base text-gray-900 dark:text-gray-100 leading-relaxed ml-6 mb-1'
       case 'numbered_list_item':
-        return 'text-base text-gray-900 leading-relaxed ml-6 mb-1'
+        return 'text-base text-gray-900 dark:text-gray-100 leading-relaxed ml-6 mb-1'
       case 'to_do':
         return `text-base leading-relaxed ml-6 mb-1 flex items-start gap-2 ${
-          block.metadata?.checked ? 'text-gray-500' : 'text-gray-900'
+          block.metadata?.checked ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'
         }`
       default:
-        return 'text-base text-gray-900 leading-relaxed mb-2'
+        return 'text-base text-gray-900 dark:text-gray-100 leading-relaxed mb-2'
     }
   }
 

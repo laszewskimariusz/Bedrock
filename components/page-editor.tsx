@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
-import { ArrowLeft, Save, Share2, MoreHorizontal, Plus, Eye, Edit } from 'lucide-react'
+import { ArrowLeft, Save, Share2, MoreHorizontal, Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../app/lib/auth-context'
 import BlockEditor, { Block } from './block-editor'
-import BlockViewer from './block-viewer'
 
 interface PageEditorProps {
   pageId: string
@@ -30,7 +29,8 @@ export default function PageEditor({ pageId }: PageEditorProps) {
   const [blocks, setBlocks] = useState<Block[]>([])
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const [isEditMode, setIsEditMode] = useState(true)
+  const [selectedBlockIds, setSelectedBlockIds] = useState<Set<string>>(new Set())
+  const [focusedBlockId, setFocusedBlockId] = useState<string | null>(null)
 
   // Auto-save functionality
   useEffect(() => {
@@ -116,15 +116,34 @@ export default function PageEditor({ pageId }: PageEditorProps) {
   }
 
   const handleBlocksChange = (newBlocks: Block[]) => {
-    setBlocks(newBlocks)
+    // Zawsze musi być co najmniej jeden blok
+    if (newBlocks.length === 0) {
+      const emptyBlock: Block = {
+        id: `block-${Date.now()}`,
+        type: 'paragraph',
+        content: [{
+          type: 'text',
+          text: {
+            content: '',
+            link: null
+          }
+        }],
+        children: [],
+        created_time: new Date().toISOString(),
+        last_edited_time: new Date().toISOString()
+      }
+      setBlocks([emptyBlock])
+    } else {
+      setBlocks(newBlocks)
+    }
   }
 
   const popularEmojis = ['📝', '📚', '💡', '🚀', '📊', '✅', '🎯', '💼', '🔖', '🗂️', '📋', '🎨']
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="h-screen bg-white dark:bg-gray-900 overflow-hidden flex flex-col">
       {/* Header - Notion Style */}
-      <div className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -132,42 +151,20 @@ export default function PageEditor({ pageId }: PageEditorProps) {
                 variant="ghost" 
                 size="sm" 
                 onClick={goBack}
-                className="gap-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-8 px-2"
+                className="gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 h-8 px-2"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span className="text-sm">Back</span>
               </Button>
               
               {lastSaved && (
-                <div className="text-xs text-gray-500 ml-2">
+                <div className="text-xs text-gray-500 dark:text-gray-400 ml-2">
                   {isSaving ? 'Saving...' : formatLastSaved()}
                 </div>
               )}
             </div>
             
             <div className="flex items-center gap-1">
-              {/* Edit/Preview Toggle */}
-              <Button 
-                variant={isEditMode ? "default" : "outline"}
-                size="sm" 
-                onClick={() => setIsEditMode(true)}
-                className="gap-1 h-8 px-2"
-              >
-                <Edit className="h-4 w-4" />
-                <span className="text-sm">Edit</span>
-              </Button>
-              <Button 
-                variant={!isEditMode ? "default" : "outline"}
-                size="sm" 
-                onClick={() => setIsEditMode(false)}
-                className="gap-1 h-8 px-2"
-              >
-                <Eye className="h-4 w-4" />
-                <span className="text-sm">Preview</span>
-              </Button>
-              
-              <div className="w-px h-6 bg-gray-200 mx-1"></div>
-              
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -189,22 +186,20 @@ export default function PageEditor({ pageId }: PageEditorProps) {
       </div>
 
       {/* Editor/Preview - Notion Style */}
-      <div className="max-w-2xl mx-auto px-6 py-16">
-        <div className="space-y-4">
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-2xl mx-auto px-6 py-16">
+          <div className="space-y-4">
           {/* Emoji Picker */}
           <div className="flex items-center gap-3 mb-6">
             <button 
               className="text-4xl hover:bg-gray-100 rounded-lg p-2 transition-colors"
               onClick={() => {
-                if (isEditMode) {
-                  // Simple emoji rotation for demo
-                  const currentIndex = popularEmojis.indexOf(emoji)
-                  const nextIndex = (currentIndex + 1) % popularEmojis.length
-                  setEmoji(popularEmojis[nextIndex])
-                }
+                // Simple emoji rotation for demo
+                const currentIndex = popularEmojis.indexOf(emoji)
+                const nextIndex = (currentIndex + 1) % popularEmojis.length
+                setEmoji(popularEmojis[nextIndex])
               }}
-              title={isEditMode ? "Click to change emoji" : "Emoji"}
-              disabled={!isEditMode}
+              title="Click to change emoji"
             >
               {emoji}
             </button>
@@ -212,46 +207,26 @@ export default function PageEditor({ pageId }: PageEditorProps) {
 
           {/* Title */}
           <div className="mb-8">
-            {isEditMode ? (
-              <input
-                type="text"
-                value={title}
-                onChange={handleTitleChange}
-                placeholder="Untitled"
-                className="w-full text-4xl font-bold text-gray-900 placeholder-gray-400 border-none outline-none resize-none bg-transparent"
-                style={{ 
-                  fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
-                  lineHeight: '1.2'
-                }}
-              />
-            ) : (
-              <h1 className="text-4xl font-bold text-gray-900 mb-8" style={{ lineHeight: '1.2' }}>
-                {title || 'Untitled'}
-              </h1>
-            )}
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="Untitled"
+              className="w-full text-4xl font-bold text-gray-900 placeholder-gray-400 border-none outline-none resize-none bg-transparent"
+              style={{ 
+                fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif',
+                lineHeight: '1.2'
+              }}
+            />
           </div>
 
           {/* Content Editor/Viewer */}
           <div className="relative">
-            {isEditMode ? (
-              <BlockEditor
-                pageId={pageId}
-                initialBlocks={blocks}
-                onChange={handleBlocksChange}
-              />
-            ) : (
-              <div className="min-h-[400px]">
-                {blocks.length > 0 ? (
-                  <BlockViewer blocks={blocks} />
-                ) : (
-                  <div className="text-center py-16 text-gray-500">
-                    <Eye className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No content to preview</p>
-                    <p className="text-sm">Switch to edit mode to add content</p>
-                  </div>
-                )}
-              </div>
-            )}
+            <BlockEditor
+              pageId={pageId}
+              initialBlocks={blocks}
+              onChange={handleBlocksChange}
+            />
           </div>
 
           {/* Page Info Footer */}
@@ -261,9 +236,8 @@ export default function PageEditor({ pageId }: PageEditorProps) {
               <span>•</span>
               <span>{blocks.length} blocks</span>
               <span>•</span>
-              <span>{isEditMode ? 'Edit mode' : 'Preview mode'}</span>
-              <span>•</span>
               <span>Auto-saved</span>
+            </div>
             </div>
           </div>
         </div>

@@ -171,42 +171,42 @@ export default function Dashboard() {
   // Show loading state
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-white">
+      <div className="flex-1 flex items-center justify-center bg-white dark:bg-gray-900">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your workspace...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading your workspace...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 overflow-auto bg-white">
+    <div className="flex-1 overflow-auto bg-white dark:bg-gray-900">
       <div className="max-w-4xl mx-auto p-12">
         {/* Welcome Section - Notion Style */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-3 text-gray-900">
+          <h1 className="text-4xl font-bold mb-3 text-gray-900 dark:text-gray-100">
             {getGreeting()}, {getDisplayName(user)}! 👋
           </h1>
-          <p className="text-xl text-gray-600 font-normal">
+          <p className="text-xl text-gray-600 dark:text-gray-400 font-normal">
             What would you like to work on today?
           </p>
         </div>
 
         {/* Quick Actions - Notion Style Grid */}
         <div className="mb-12">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick start</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Quick start</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={action.action}
                 disabled={action.disabled}
-                className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 text-left disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-1">{action.title}</h3>
-                  <p className="text-sm text-gray-600">{action.description}</p>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">{action.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{action.description}</p>
                 </div>
               </button>
             ))}
@@ -216,20 +216,20 @@ export default function Dashboard() {
         {/* Recent Pages - Notion Style */}
         {recentPages.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recently viewed</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recently viewed</h2>
             <div className="space-y-1">
               {recentPages.map((page, index) => (
                 <button
                   key={index}
                   onClick={() => router.push(`/page/${page.id}`)}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors w-full text-left group"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors w-full text-left group"
                 >
                   <span className="text-lg">{page.emoji}</span>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900 group-hover:text-blue-600">
+                    <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600">
                       {page.title}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {page.blocks.length} blocks • Edited {formatRelativeTime(new Date(page.lastSaved))}
                     </p>
                   </div>
@@ -244,10 +244,10 @@ export default function Dashboard() {
           <div className="text-center py-16">
             <div className="mb-6">
               <div className="text-6xl mb-4">📝</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Welcome to your workspace
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 This is where you'll find all your pages. Start by creating your first page above.
               </p>
             </div>
@@ -255,15 +255,15 @@ export default function Dashboard() {
         )}
 
         {/* Tips Section - Subtle */}
-        <div className="border-t border-gray-100 pt-8">
-          <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
-            <h3 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+        <div className="border-t border-gray-100 dark:border-gray-800 pt-8">
+          <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-6 border border-blue-100 dark:border-blue-800">
+            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
               <span>💡</span> Block Editor Tips
             </h3>
-            <div className="space-y-2 text-sm text-blue-800">
-              <p>• Type <code className="bg-blue-100 px-1 rounded">/</code> to see all available block types</p>
-              <p>• Press <code className="bg-blue-100 px-1 rounded">Enter</code> to create a new block</p>
-              <p>• Use <code className="bg-blue-100 px-1 rounded">Backspace</code> on empty blocks to delete them</p>
+            <div className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
+              <p>• Type <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">/</code> to see all available block types</p>
+              <p>• Press <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">Enter</code> to create a new block</p>
+              <p>• Use <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">Backspace</code> on empty blocks to delete them</p>
               <p>• Drag the ⋮⋮ handle to reorder blocks</p>
               <p>• Your work is automatically saved as you type</p>
             </div>
