@@ -6,7 +6,6 @@ export async function testDatabaseConnection() {
     const { data: session, error: authError } = await supabase.auth.getSession()
     
     if (authError) {
-      console.log('Database auth connection test failed:', authError.message)
       return { success: false, error: authError.message }
     }
 
@@ -29,8 +28,7 @@ export async function testDatabaseConnection() {
       }
     }
 
-    console.log('Database connection successful!')
-    console.log('Available application tables:', existingTables)
+    
     return { 
       success: true, 
       data: existingTables, 
@@ -38,14 +36,12 @@ export async function testDatabaseConnection() {
       message: `Connection successful. Found ${existingTables.length} application tables.`
     }
   } catch (err: any) {
-    console.log('Database connection test error:', err.message)
     return { success: false, error: err.message }
   }
 }
 
 export async function createAppTables() {
   try {
-    console.log('Checking for app tables...')
     
     // Test czy tabele już istnieją poprzez próbę dostępu
     const tableTests = ['profiles', 'workspaces', 'pages']
@@ -66,17 +62,16 @@ export async function createAppTables() {
       }
     }
     
-    console.log('Existing application tables:', existingTables)
+    
     
     if (existingTables.length === 3) {
-      console.log('All tables already exist!')
       return { 
         success: true, 
         message: `All application tables exist: ${existingTables.join(', ')}` 
       }
     }
     
-    console.log('Some tables are missing. Please create them manually in Supabase dashboard.')
+    
     return { 
       success: false, 
       error: `Missing tables: ${tableTests.filter(t => !existingTables.includes(t)).join(', ')}. Please run the SQL scripts in Supabase dashboard.`,
@@ -174,14 +169,11 @@ export async function testSupabaseAuth() {
     const { data, error } = await supabase.auth.getSession()
 
     if (error) {
-      console.log('Supabase auth test failed:', error.message)
       return { success: false, error: error.message }
     }
 
-    console.log('Supabase auth service working!')
     return { success: true, session: data.session }
   } catch (err: any) {
-    console.log('Supabase auth test error:', err.message)
     return { success: false, error: err.message }
   }
-} 
+}

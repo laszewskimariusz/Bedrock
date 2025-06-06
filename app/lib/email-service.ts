@@ -5,8 +5,6 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
     // Send to actual user's email
     const targetEmail = email
     
-    console.log('🚀 Attempting to send welcome email to:', targetEmail)
-    
     const { data, error } = await resend.emails.send({
       from: 'noreply@zatto-lab.cloud',
       to: [targetEmail],
@@ -140,10 +138,6 @@ export async function sendWelcomeEmail(email: string, firstName: string) {
       return { success: false, error: error.message }
     }
 
-    console.log('✅ Welcome email sent successfully!')
-    console.log('Email ID:', data?.id)
-    console.log('From:', 'Bedrock <onboarding@resend.dev>')
-    console.log('To:', targetEmail)
     return { success: true, data }
   } catch (error: any) {
     console.error('Error sending welcome email:', error)
@@ -193,7 +187,7 @@ export async function sendPasswordResetEmail(email: string, resetLink: string) {
       return { success: false, error: error.message }
     }
 
-    console.log('Password reset email sent successfully:', data)
+    
     return { success: true, data }
   } catch (error: any) {
     console.error('Error sending password reset email:', error)

@@ -197,11 +197,9 @@ export default function BlockEditor({ pageId, initialBlocks = [], onChange }: Bl
   // Funkcja do rozpoznawania typu bloku na podstawie formatowania markdown
   const detectBlockType = (line: string): { type: BlockType; content: string; metadata?: any } => {
     const trimmed = line.trim()
-    console.log('Detecting type for line:', trimmed)
     
     // Nagłówki
     if (trimmed.startsWith('# ')) {
-      console.log('Detected: heading_1')
       return { type: 'heading_1', content: trimmed.substring(2) }
     }
     if (trimmed.startsWith('## ')) {
@@ -248,22 +246,18 @@ export default function BlockEditor({ pageId, initialBlocks = [], onChange }: Bl
     }
     
     // Domyślnie paragraph
-    console.log('Detected: paragraph')
     return { type: 'paragraph', content: trimmed }
   }
 
   // Obsługa wklejania tekstu z wieloma liniami i inteligentnym rozpoznawaniem formatowania
   const handlePaste = (e: React.ClipboardEvent, blockId: string, blockIndex: number) => {
     const pastedText = e.clipboardData.getData('text')
-    console.log('Pasted text:', pastedText)
-    console.log('Contains newline:', pastedText.includes('\n'))
     
     // Sprawdź czy tekst zawiera znaki nowej linii (również \r\n dla Windows)
     if (pastedText.includes('\n') || pastedText.includes('\r\n')) {
       e.preventDefault()
       
       const lines = pastedText.split(/\r?\n/).filter(line => line.trim() !== '')
-      console.log('Lines:', lines)
       
       if (lines.length > 1) {
         // Pierwszą linię analizuj i wstaw do aktualnego bloku
