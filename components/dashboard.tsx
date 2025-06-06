@@ -24,7 +24,6 @@ export default function Dashboard() {
   const [isCreatingPage, setIsCreatingPage] = useState(false)
   const [recentPages, setRecentPages] = useState<PageData[]>([])
 
-  console.log('📊 Dashboard - User:', user?.email, 'Loading:', loading)
 
   const getGreeting = () => {
     const hour = new Date().getHours()

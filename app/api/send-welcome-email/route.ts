@@ -4,12 +4,10 @@ import { sendWelcomeEmail } from '../../lib/email-service'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    console.log('Received request body:', body)
     
     const { email, firstName } = body
 
     if (!email || !firstName) {
-      console.log('Missing email or firstName:', { email, firstName })
       return NextResponse.json({
         success: false,
         error: 'Email and firstName are required'

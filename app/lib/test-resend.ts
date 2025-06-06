@@ -3,7 +3,6 @@ import { resend } from './resend'
 export async function testResendConnection() {
   try {
     // Test if Resend API key is configured
-    console.log('Checking RESEND_API_KEY:', process.env.RESEND_API_KEY ? 'Found' : 'Missing')
     
     if (!process.env.RESEND_API_KEY) {
       return { 
@@ -28,14 +27,11 @@ export async function testResendConnection() {
     })
 
     if (error) {
-      console.log('Resend API test failed:', error)
       return { success: false, error: error.message || 'Unknown error' }
     }
 
-    console.log('Resend API test successful!', data)
     return { success: true, data }
   } catch (err: any) {
-    console.log('Resend API test error:', err.message)
     return { success: false, error: err.message }
   }
 }

@@ -2,7 +2,6 @@ import { supabase } from './supabase'
 
 export async function createTablesManually() {
   try {
-    console.log('Creating tables manually...')
 
     // 1. Najpierw sprawdź czy tabele już istnieją
     const { data: existingTables } = await supabase
@@ -10,7 +9,7 @@ export async function createTablesManually() {
       .select('table_name')
       .eq('table_schema', 'public')
 
-    console.log('Existing tables:', existingTables)
+    
 
     // 2. Spróbuj stworzyć tabelę testową
     const testQuery = `
@@ -21,7 +20,7 @@ export async function createTablesManually() {
       );
     `
 
-    console.log('Trying to create test table...')
+    
     
     // Użyj prostego zapytania SQL
     const { error: testError } = await supabase.rpc('sql', { query: testQuery })
@@ -29,7 +28,7 @@ export async function createTablesManually() {
     if (testError) {
       console.error('Test table creation failed:', testError)
     } else {
-      console.log('Test table created successfully!')
+      
     }
 
     // 3. Sprawdź tabele ponownie
@@ -69,7 +68,7 @@ export async function insertTestProfile() {
       return { success: false, error: error.message }
     }
 
-    console.log('Test profile inserted:', data)
+    
     return { success: true, data }
 
   } catch (err: any) {

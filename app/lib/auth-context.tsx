@@ -41,9 +41,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('🔄 Auth state change:', event, session?.user?.email || 'No user')
-      console.log('🔄 Full session object:', session)
-      console.log('🔄 Session expires at:', session?.expires_at)
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
@@ -70,7 +67,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Send welcome email after successful signup
     if (data.user && !error) {
       try {
-        console.log('Sending welcome email for:', { email, firstName })
         const response = await fetch('/api/send-welcome-email', {
           method: 'POST',
           headers: {
@@ -93,7 +89,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signIn = async (email: string, password: string) => {
-    console.log('🔐 Attempting to sign in with:', email)
     
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -105,7 +100,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error
     }
     
-    console.log('✅ Sign in successful:', data)
     return data
   }
 

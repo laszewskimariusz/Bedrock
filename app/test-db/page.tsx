@@ -45,7 +45,6 @@ export default function TestDatabasePage() {
     try {
       const response = await fetch('/api/test-env')
       const result = await response.json()
-      console.log('Server environment:', result)
       setServerEnvResult(result)
       return result
     } catch (error) {

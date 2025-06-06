@@ -32,7 +32,6 @@ export async function POST() {
       }, { status: 400 })
     }
 
-    console.log('Resend API test successful!', data)
     return NextResponse.json({
       success: true,
       data,
